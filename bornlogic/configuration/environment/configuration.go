@@ -6,12 +6,11 @@ import (
 )
 
 type Configuration struct {
-	Postgres Postgres
+	PostgreSQL PostgreSQL
 }
 
 func Load() (*Configuration, error) {
 	configuration := &Configuration{}
-
 	if err := envconfig.Process("", configuration); err != nil {
 		return nil, err
 	}

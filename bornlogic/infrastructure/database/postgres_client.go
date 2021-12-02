@@ -1,4 +1,4 @@
-package postgres
+package database
 
 import (
 	"database/sql"
@@ -8,15 +8,13 @@ import (
 	"gorm.io/gorm"
 )
 
-const driverName = "postgres"
-
 type Client struct {
 	*sql.DB
 	Gorm *gorm.DB
 }
 
-func NewClient(config environment.Postgres) (*Client, error) {
-	db, err := sql.Open(driverName, config.BuildConnectionString())
+func NewPostgreSQLClient(config environment.PostgreSQL) (*Client, error) {
+	db, err := sql.Open("postgres", config.BuildConnectionString())
 	if err != nil {
 		return nil, err
 	}

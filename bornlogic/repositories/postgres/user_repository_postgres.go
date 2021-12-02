@@ -3,16 +3,16 @@ package postgres
 import (
 	"context"
 	"github.com/authelia/authelia/v4/bornlogic/entities"
-	"github.com/authelia/authelia/v4/bornlogic/infrastructure/database/postgres"
+	"github.com/authelia/authelia/v4/bornlogic/infrastructure/database"
 	"github.com/authelia/authelia/v4/bornlogic/repositories"
 	"gorm.io/gorm"
 )
 
 type userPostgresRepository struct {
-	*postgres.Client
+	*database.Client
 }
 
-func NewUserRepository(client *postgres.Client) repositories.User {
+func NewUserRepository(client *database.Client) repositories.User {
 	return &userPostgresRepository{
 		Client: client,
 	}

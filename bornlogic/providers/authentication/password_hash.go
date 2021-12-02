@@ -11,6 +11,7 @@ func CheckPassword(hashed, plain string) (bool, error) {
 	return true, nil
 }
 
+// HashPassword generate a hashed password.
 func HashPassword(password string) (string, error) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {

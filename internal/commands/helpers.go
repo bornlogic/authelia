@@ -1,7 +1,7 @@
 package commands
 
 import (
-	"github.com/authelia/authelia/v4/bornlogic"
+	bornlogicProvider "github.com/authelia/authelia/v4/bornlogic/providers"
 	"github.com/authelia/authelia/v4/internal/authentication"
 	"github.com/authelia/authelia/v4/internal/authorization"
 	"github.com/authelia/authelia/v4/internal/middlewares"
@@ -47,12 +47,12 @@ func getProviders() (providers middlewares.Providers, warnings []error, errors [
 	case config.AuthenticationBackend.LDAP != nil:
 		userProvider = authentication.NewLDAPUserProvider(config.AuthenticationBackend, autheliaCertPool)
 	}
+
 	//TODO fix me
-	bornlogicProvider, err := bornlogic.NewProvider()
+	bornlogicProvider, err := bornlogicProvider.NewProvider()
 	if err != nil {
 		panic(err)
 	}
-	_ = bornlogicProvider
 	userProvider = bornlogicProvider.UserProvider
 
 	var notifier notification.Notifier
