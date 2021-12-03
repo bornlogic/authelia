@@ -7,3 +7,11 @@
 !entrypoint.sh
 !healthcheck.sh
 !.healthcheck.env
+
+!web
+!api
+!cmd
+!internal
+!bornlogic
+!go.mod
+!go.sum

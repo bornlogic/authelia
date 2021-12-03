@@ -8,7 +8,9 @@ WORKDIR /node/src/app
 COPY web ./
 
 # Install the dependencies and build
-RUN yarn install --frozen-lockfile && yarn build
+RUN rm -rf node_modules **/node_modules
+RUN rm -rf yarn.lock **/yarn.lock
+RUN yarn cache clean && yarn install && yarn build
 
 # =======================================
 # ===== Build image for the backend =====
@@ -38,7 +40,12 @@ mv api internal/server/public_html/api && \
 chmod 0666 /go/src/app/.healthcheck.env && \
 echo ">> Starting go build..." && \
 CGO_ENABLED=1 CGO_CPPFLAGS="-D_FORTIFY_SOURCE=2 -fstack-protector-strong" CGO_LDFLAGS="-Wl,-z,relro,-z,now" go build \
--ldflags "-linkmode=external -s -w ${LDFLAGS_EXTRA}" -trimpath -buildmode=pie -o authelia ./cmd/authelia
+-ldflags "-linkmode=external -s -v -w ${LDFLAGS_EXTRA}" -trimpath -buildmode=pie -o authelia ./cmd/authelia
+
+# Test
+RUN ls
+RUN find ./cmd
+RUN ls ./
 
 # ===================================
 # ===== Authelia official image =====
@@ -55,7 +62,7 @@ ENV PATH="/app:${PATH}" \
 RUN \
 apk --no-cache add ca-certificates su-exec tzdata
 
-COPY --from=builder-backend /go/src/app/cmd/authelia/authelia /go/src/app/LICENSE /go/src/app/entrypoint.sh /go/src/app/healthcheck.sh /go/src/app/.healthcheck.env ./
+COPY --from=builder-backend /go/src/app/authelia /go/src/app/LICENSE /go/src/app/entrypoint.sh /go/src/app/healthcheck.sh /go/src/app/.healthcheck.env ./
 
 RUN \
 chmod 0666 /app/.healthcheck.env
